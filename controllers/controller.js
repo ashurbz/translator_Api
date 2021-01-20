@@ -44,8 +44,7 @@ function smartCache(languageCode,text){
         textType: 'plain' 
       },
       headers: {
-        'content-type': 'application/json',
-         
+        'content-type': 'application/json',  
         'x-rapidapi-key': '5b619857d7mshc5ac66e73308840p1ef199jsn73cdfb32d201',
         'x-rapidapi-host': 'microsoft-translator-text.p.rapidapi.com'
       },
@@ -97,8 +96,7 @@ module.exports.translateText= function(req,res){
       },
       data: JSON.stringify([{Text:req.body.text}])
     };
-    
-    axios.request(options).
+     axios.request(options).
     then(response => {
             console.log(response.data[0].translations[0]);
             
