@@ -27,7 +27,7 @@ from the external service but also other languages like Hindi, Tamil, etc. and s
 
 **POSTMAN Collection Link**
 - You can visit on https://www.postman.com/collections/d3c19c53ee3 to view the example.
-
+- Can visit screenshot folder for seeing the hitting api process.
 
 
 
