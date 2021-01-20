@@ -1,10 +1,8 @@
+const axios=require("axios")
 
-const translate = require('@vitalets/google-translate-api');
-
-// create the redis client
+// creating the redis client
 const redis=require('redis');
 const REDIS_PORT = process.env.PORT || 6379;
-const axios=require("axios")
 const client = redis.createClient(REDIS_PORT);
 
 // For knowing the language code of language entered by user
@@ -12,7 +10,7 @@ const ISO6391 = require('iso-639-1');
  
 
 
-// add similar languages array (it can be updated further for more languages)
+// add similar languages array(smart precaching)
 const similarLanguagesList=[
     ["hi","kn","bn","gu","pa","ta","te"],
     ["en","cy",],
@@ -37,6 +35,7 @@ function smartCache(languageCode,text){
                console.log(similarLanguagesList[i][j]);
         const options = {
       method: 'POST',
+    //   using api for translation
       url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
       params: {
         to: similarLanguagesList[i][j],
@@ -58,12 +57,9 @@ function smartCache(languageCode,text){
                .then(response => {
                 console.log(response.data[0].translations[0].text);
     
-                // Set data to Redis
+                // adding data to redis
                 let key=text+":"+similarLanguagesList[i][j];
-                client.setex(key, 2000, response.data[0].translations[0].text);
-            
-                // console.log(`translated to ${similarLanguagesList[i][j]}`,response.from.language.iso);
-                          
+                client.setex(key, 2000, response.data[0].translations[0].text);                          
                 
             }).catch(err => {
                 console.log('**err**',err.data);
@@ -79,10 +75,9 @@ function smartCache(languageCode,text){
 
 module.exports.translateText= function(req,res){
    
-    // get the language code that you want to translate text to
+    // getting the language code
     let languageCode= ISO6391.getCode(req.body.language);
     
-//    pre cache function for storing keys for other related languages
     smartCache(languageCode,req.body.text);
 
 
@@ -107,16 +102,14 @@ module.exports.translateText= function(req,res){
     then(response => {
             console.log(response.data[0].translations[0]);
             
-            // Set data to Redis (enter data in cache)
+            // enter data in cache
             let key=req.body.text+":"+languageCode;
             
              
             client.setex(key, 2000, response.data[0].translations[0].text);
         
-            // console.log(`translated to ${req.body.language}`,response.from.language.iso);
-            
             return res.json(200, {
-                message: "Here is the translated text",
+                message: "translaton done",
                 data:response.data[0].translations[0].text
             });          
             

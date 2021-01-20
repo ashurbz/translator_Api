@@ -1,6 +1,6 @@
-const REDIS_PORT = process.env.PORT || 6379;
+const REDIS_PORT = process.env.PORT || 6379;  // port for redis server
 const redis=require('redis');
-// create the redis client
+
 const client = redis.createClient(REDIS_PORT);
 
 const ISO6391 = require('iso-639-1');
@@ -25,7 +25,7 @@ module.exports.cache=function (req, res, next) {
       if (data !== null) {
           console.log("middleware used");
         return res.json(200, {
-            message: "Here is the translated text",
+            message: "translation done",
             data:data
         }); 
       } else {
