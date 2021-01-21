@@ -26,7 +26,7 @@ from the external service but also other languages like Hindi, Tamil, etc. and s
 - Send two keys in body(text and language) and required results will be there
 
 **POSTMAN Collection Link**
-- You can visit on https://www.postman.com/collections/d3c19c53ee3 to view the example.
+- You can visit on https://www.postman.com/collections/d3c19c53ee3e15a76a1b to view the example.
 - Can visit screenshot folder for seeing the hitting api process.
 
 
